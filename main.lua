@@ -228,9 +228,9 @@ function love.update(dt)
     helpers.move(entities.ball, dt)
 
     if player_lives <= 0 then
-        player.pos.x = (width / 2)-player_length/2
-        entities.ball.pos.x = width/2 - player_height/2
-        entities.ball.pos.y = height/2 - player_height/2
+        position[entities.player].x = (width / 2)-player_length/2
+        position[entities.ball].x = width/2 - player_height/2
+        position[entities.ball].y = height/2 - player_height/2
         velocity[entities.ball] = {x = 0, y = 0}
 
 
