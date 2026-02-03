@@ -36,7 +36,12 @@ git clone https://github.com/onasmallbit/osb-brick-breaker.git
 ```
 Now in the same folder run the game:
 
+for GNU/Linux based OSes, run:
+
 ```bash
 love .
-
 ```
+
+for Windows/MacOS:
+
+just drag and drop the cloned folder of the game on the LOVE2D shortcut.
