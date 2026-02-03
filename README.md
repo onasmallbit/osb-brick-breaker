@@ -19,14 +19,24 @@ This project works well as a learning exercise or as a base for experimenting wi
 
 ## Requirements
 
-Only **LOVE2D** v11.3 or higher  
-  Download it here --> https://love2d.org
+- **LOVE2D** v11.3 or higher  
 
 ---
 
 ## Installation
 
-Clone the repository:
+
+I you haven't already installed LOVE2D:
+--> https://love2d.org/
+
+Then clone the repository:
 
 ```bash
 git clone https://github.com/onasmallbit/osb-brick-breaker.git
+```
+Now in the same folder run the game:
+
+```bash
+love .
+
+```
