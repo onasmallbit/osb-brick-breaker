@@ -33,5 +33,4 @@ function osbmath.oddevenmap(number)
     end
 end
 
-
 return osbmath
