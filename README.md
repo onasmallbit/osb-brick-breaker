@@ -4,6 +4,8 @@ A retro-style **Brick Breaker** game made with **LOVE2D**.
 
 A classic arcade game where you control a paddle to bounce a ball and destroy all the bricks. Simple, straightforward, and built for fun (and learning).
 
+![OSB Brick Breaker's game window screenshot](png/game.png "Title")
+
 ---
 
 ## Description
