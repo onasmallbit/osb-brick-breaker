@@ -34,7 +34,7 @@ Then clone the repository:
 ```bash
 git clone https://github.com/onasmallbit/osb-brick-breaker.git
 ```
-Now in the same folder run the game:
+Now in the new folder run the game:
 
 For GNU/Linux based OSes, run:
 
