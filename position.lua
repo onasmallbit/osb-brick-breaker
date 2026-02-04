@@ -45,4 +45,5 @@ for i=0,118 do
         x = 20 + col*(brick_l + 3) + osbmath.oddevenmap(row)*(brick_l/4 + 1.5),
         y = 20 + row*(brick_l/2 + 3)
     }
+    
 end
