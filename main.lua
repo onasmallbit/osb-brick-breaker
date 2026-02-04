@@ -80,7 +80,7 @@ function love.load()
     -- Creamos al jugador.
     entities.player = 1
     player = entities.player
-    position[1] = {x = (width / 2)-player_length/2, y = height - player_height*2}
+    position[1] = {x = (width - player_length)/2, y = height - player_height*2}
     velocity[1] = {x = player_maxspeed, y = 0}
     rect[1] = {x = player_length, y = player_height}
 
