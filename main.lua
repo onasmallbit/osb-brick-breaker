@@ -2,19 +2,13 @@
 osbmath = require "osbmath"
 constants = require "constants"
 
---[[
-entities = {}
-position = {}
-velocity = {}
-rect = {}
-status = {}
-]]--
-
 entities = require "entities"
 position = require "position" 
 velocity = require "velocity" 
 rect = require "rect" 
 status = require "status" 
+
+--TODO: Create helpers.lua and move these functions there...
 
 helpers = {}
 
@@ -22,7 +16,6 @@ helpers.move = function(entity_id, dt)
     position[entity_id].x = position[entity_id].x + velocity[entity_id].x * dt
     position[entity_id].y = position[entity_id].y + velocity[entity_id].y * dt
 
-    -- Limitar el movimiento del jugador a la pantalla
     if entity_id == "player" then
         if position[entity_id].x < 0 then
             position[entity_id].x = 0
@@ -46,113 +39,49 @@ helpers.are_colliding = function(entity1_id, entity2_id)
 end
 
 function love.load()
-    -- Se carga la fuente at01.ttf
+
     local font = love.graphics.newFont("ttf/at01.ttf", 50)
     love.graphics.setFont(font)
 
-    -- Se cargan los sonidos.
     hit_sound = love.audio.newSource("ogg/ping_pong_8bit_plop.ogg", "static")
     brick_sound = love.audio.newSource("ogg/ping_pong_8bit_beeep.ogg", "static")
     lose_sound = love.audio.newSource("ogg/ping_pong_8bit_peeeeeep.ogg", "static")
     
     hit_sound:setVolume(5.0)
 
-    -- Se carga la música de fondo en bucle
     background_music = love.audio.newSource("wav/Mercury.wav", "stream")
     background_music:setLooping(true)
     background_music:setVolume(0.8)
     background_music:play()
 
-
-    -- Se ejecuta una sola vez al iniciar el juego
     love.window.setTitle("OSB Brick Breaker")
     love.window.setMode(800, 600)
     love.graphics.setBackgroundColor(0.8, 0.8, 1)
 
-    --width, height = love.graphics.getDimensions()
     width = constants.SCREEN_WIDTH
     height = constants.SCREEN_HEIGHT
 
-    --player_maxspeed = 800
     player_maxspeed = constants.PLAYER_MAXSPEED
-    
-    --ball_maxspeed = 0.8 * player_maxspeed
     ball_maxspeed = constants.BALL_MAXSPEED
 
-    --player_length = 60
     player_length = constants.PLAYER_LENGTH
-    --player_height = 10
     player_height = constants.PLAYER_HEIGHT
 
     player_points = 0
     player_lives = 3
 
-    --brick_length = 40
     brick_length = constants.BRICK_LENGTH
 
-    --sqrt2 = math.sqrt(2)
     sqrt2 = constants.SQRT2
 
     ball_collided = false
 
     velocity["player"].x = player_maxspeed
 
-    --[[
-
-    -- Creamos al jugador.
-    "player" = 1
-    player = "player"
-    position[1] = {x = (width - player_length)/2, y = height - player_height*2}
-    velocity[1] = {x = player_maxspeed, y = 0}
-    rect[1] = {x = player_length, y = player_height}
-
-    -- Creamos la bola. Usamos pos = top-left para que las AABB funcionen correctamente
-    "ball" = 2
-    ball = "ball"
-    position[2] = {x = (width - player_height)/2, y = (height - player_height)/2}
-    velocity[2] = {x = 0, y = 0}
-    rect[2] = {x = player_height, y = player_height}
-
-    -- Creamos las paredes del juego (no visibles).
-    entities.topwall  = 3
-    position[3] = {x = 0, y = -100}
-    velocity[3] = {x = 0, y = 0}
-    rect[3] = {x = width, y = 100}
-
-    entities.leftwall = 4
-    position[4] = {x = -100, y = 0}
-    velocity[4] = {x = 0, y = 0}
-    rect[4] = {x = 100, y = height}
-
-    entities.rightwall = 5
-    position[5] = {x = width, y = 0}
-    velocity[5] = {x = 0, y = 0}
-    rect[5] = {x = 100, y = height}
-
-    entities.bottomwall = 6
-    bottomwall = entities.bottomwall
-    position[6] = {x = 0, y = height}
-    velocity[6] = {x = 0, y = 0}
-    rect[6] = {x = width, y = 100}
-    
-    -- Creamos los ladrillos (a partir de 7, hasta 126)
-
-    for i=0,6 do
-        for j=0,16 do
-            local new_id = #position + 1
-            entities[new_id] = new_id
-            position[new_id] = {x = 20 + j*(brick_length + 3) + osbmath.oddevenmap(i)*(brick_length/4 + 1.5), y = 20 + i*(brick_length/2 + 3)}
-            velocity[new_id] = {x = 0, y = 0}
-            rect[new_id] = {x = brick_length, y = brick_length/2}
-            status[new_id] = {dead = false}
-        end
-    end
-
-    ]]--
 end
 
 function love.update(dt)
-    -- Movimiento básico con AD
+
     if love.keyboard.isDown("a") then
         helpers.move("player", -dt)
 
@@ -184,7 +113,6 @@ function love.update(dt)
         love.audio.play(lose_sound)
     end
 
-    -- Reescribimos las comprobaciones de colision para ejecutarlas independientemente
     local collided_this_frame = false
 
     if helpers.are_colliding("player", "ball") then
@@ -197,7 +125,6 @@ function love.update(dt)
         end
         collided_this_frame = true
 
-        -- Toca el sonido de rebote
         love.audio.play(hit_sound)
     end
 
@@ -248,7 +175,7 @@ function love.update(dt)
     end
 
     ball_collided = collided_this_frame
-    -- Movimiento de la bola
+
     helpers.move("ball", dt)
 
     if player_lives <= 0 then
@@ -268,7 +195,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    -- Dibujado
+
     love.graphics.setColor(0.2, 0, 0.8)
     love.graphics.rectangle("fill", position["player"].x, position["player"].y, rect["player"].x, rect["player"].y)
 
