@@ -7,3 +7,5 @@ velocity = {}
 velocity["player"] = {x = 0, y = 0}
 
 velocity["ball"] = {x = 0, y = 0}
+
+return velocity

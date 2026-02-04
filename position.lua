@@ -47,3 +47,5 @@ for i=0,118 do
     }
     
 end
+
+return position

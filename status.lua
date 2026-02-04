@@ -12,3 +12,5 @@ for i=0,118 do
     status["brick" .. i] = {dead = false}
     
 end
+
+return status
