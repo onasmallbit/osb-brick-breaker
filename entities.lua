@@ -11,6 +11,8 @@ entities = {
 
 -- Bricks appear from index 7 onwards...
 
-for i=7,125 do
-    entities["brick_" .. i] = i
+for i=0,118 do
+    entities["brick" .. i] = i + 7
 end
+
+return entities
