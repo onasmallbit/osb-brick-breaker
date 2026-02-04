@@ -1,20 +1,24 @@
 constants = require("constants")
 
+-- Some aliases for shorter lines...
+local brick_cols = constants.BRICK_COLUMNS
+local brick_rows = constants.BRICK_ROWS
+
 -- In this file, we define the entities used in the game.
 
 entities = {
-    player = 1,
-    ball = 2,
-    topwall = 3,
-    bottomwall = 4,
-    leftwall = 5,
-    rightwall = 6,
+    "player",
+    "ball",
+    "topwall",
+    "bottomwall",
+    "leftwall",
+    "rightwall",
 }
 
-first_brick_id = #entities + 1
+for i=0, brick_cols * brick_rows - 1 do
 
-for i=0,constants.BRICK_COLUMNS * constants.BRICK_ROWS - 1 do
-    entities["brick" .. i] = i + 
+    table.insert(entities, "brick" .. i)
+    
 end
 
 return entities
