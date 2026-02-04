@@ -1,3 +1,5 @@
+constants = require("constants")
+
 -- In this file, we define the entities used in the game.
 
 entities = {
@@ -9,10 +11,10 @@ entities = {
     rightwall = 6,
 }
 
--- Bricks appear from index 7 onwards...
+first_brick_id = #entities + 1
 
-for i=0,118 do
-    entities["brick" .. i] = i + 7
+for i=0,constants.BRICK_COLUMNS * constants.BRICK_ROWS - 1 do
+    entities["brick" .. i] = i + 
 end
 
 return entities
