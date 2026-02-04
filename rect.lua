@@ -22,7 +22,7 @@ rect = {}
 
 rect["player"] = {x = player_l, y = player_h}
 
-rect["ball"] = {x = player_l, y = player_h}
+rect["ball"] = {x = player_h, y = player_h}
 
 rect["topwall"]    = {x = screen_w, y = wall_th }
 rect["bottomwall"] = rect["topwall"]
@@ -37,7 +37,7 @@ for i=0,118 do
     local col = i % brick_cols
     local row = i % brick_rows
 
-    rect["brick" .. i] = {
+    rect["brick_" .. i] = {
         x = brick_l,
         y = brick_l/2
     }

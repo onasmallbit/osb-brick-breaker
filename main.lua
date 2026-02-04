@@ -1,11 +1,20 @@
 -- main.lua
 osbmath = require "osbmath"
+constants = require "constants"
 
+--[[
 entities = {}
 position = {}
 velocity = {}
 rect = {}
 status = {}
+]]--
+
+entities = require "entities"
+position = require "position" 
+velocity = require "velocity" 
+rect = require "rect" 
+status = require "status" 
 
 helpers = {}
 
@@ -14,7 +23,7 @@ helpers.move = function(entity_id, dt)
     position[entity_id].y = position[entity_id].y + velocity[entity_id].y * dt
 
     -- Limitar el movimiento del jugador a la pantalla
-    if entity_id == player then
+    if entity_id == "player" then
         if position[entity_id].x < 0 then
             position[entity_id].x = 0
         end
@@ -60,39 +69,52 @@ function love.load()
     love.window.setMode(800, 600)
     love.graphics.setBackgroundColor(0.8, 0.8, 1)
 
-    width, height = love.graphics.getDimensions()
+    --width, height = love.graphics.getDimensions()
+    width = constants.SCREEN_WIDTH
+    height = constants.SCREEN_HEIGHT
 
-    player_maxspeed = 800
-    ball_maxspeed = 0.8 * player_maxspeed
+    --player_maxspeed = 800
+    player_maxspeed = constants.PLAYER_MAXSPEED
+    
+    --ball_maxspeed = 0.8 * player_maxspeed
+    ball_maxspeed = constants.BALL_MAXSPEED
 
-    player_length = 60
-    player_height = 10
+    --player_length = 60
+    player_length = constants.PLAYER_LENGTH
+    --player_height = 10
+    player_height = constants.PLAYER_HEIGHT
 
     player_points = 0
     player_lives = 3
 
-    brick_length = 40
+    --brick_length = 40
+    brick_length = constants.BRICK_LENGTH
 
-    sqrt2 = math.sqrt(2)
+    --sqrt2 = math.sqrt(2)
+    sqrt2 = constants.SQRT2
 
     ball_collided = false
 
+    velocity["player"].x = player_maxspeed
+
+    --[[
+
     -- Creamos al jugador.
-    entities.player = 1
-    player = entities.player
+    "player" = 1
+    player = "player"
     position[1] = {x = (width - player_length)/2, y = height - player_height*2}
     velocity[1] = {x = player_maxspeed, y = 0}
     rect[1] = {x = player_length, y = player_height}
 
     -- Creamos la bola. Usamos pos = top-left para que las AABB funcionen correctamente
-    entities.ball = 2
-    ball = entities.ball
+    "ball" = 2
+    ball = "ball"
     position[2] = {x = (width - player_height)/2, y = (height - player_height)/2}
     velocity[2] = {x = 0, y = 0}
     rect[2] = {x = player_height, y = player_height}
 
     -- Creamos las paredes del juego (no visibles).
-    entities.topwall = 3
+    entities.topwall  = 3
     position[3] = {x = 0, y = -100}
     velocity[3] = {x = 0, y = 0}
     rect[3] = {x = width, y = 100}
@@ -126,33 +148,35 @@ function love.load()
         end
     end
 
+    ]]--
 end
 
 function love.update(dt)
     -- Movimiento básico con AD
     if love.keyboard.isDown("a") then
-        helpers.move(player, -dt)
-        if velocity[ball].y == 0 and velocity[ball].x == 0 then
+        helpers.move("player", -dt)
+
+        if velocity["ball"].y == 0 and velocity["ball"].x == 0 then
             vector_aux = osbmath.new_univector(1,2)
-            velocity[ball] = {x = -ball_maxspeed/sqrt2, y = ball_maxspeed/sqrt2}
+            velocity["ball"] = {x = -ball_maxspeed/sqrt2, y = ball_maxspeed/sqrt2}
         end
     end
 
     if love.keyboard.isDown("d") then
-        helpers.move(player, dt)
-        if velocity[ball].y == 0 and velocity[ball].x == 0 then
-            velocity[ball] = {x = ball_maxspeed/sqrt2, y = ball_maxspeed/sqrt2}
+        helpers.move("player", dt)
+        if velocity["ball"].y == 0 and velocity["ball"].x == 0 then
+            velocity["ball"] = {x = ball_maxspeed/sqrt2, y = ball_maxspeed/sqrt2}
         end
     end
 
     if love.keyboard.isDown("r") then
-        position[player].x = (width / 2)-player_length/2
-        position[ball].x = width/2 - player_height/2
-        position[ball].y = height/2 - player_height/2
-        velocity[ball] = {x = 0, y = 0}
+        position["player"].x = (width / 2)-player_length/2
+        position["ball"].x = width/2 - player_height/2
+        position["ball"].y = height/2 - player_height/2
+        velocity["ball"] = {x = 0, y = 0}
 
-        for i=7,#position do
-            status[i].dead = false
+        for i=0,118 do
+            status["brick_" .. i].dead = false
         end
 
         player_points = 0
@@ -163,13 +187,13 @@ function love.update(dt)
     -- Reescribimos las comprobaciones de colision para ejecutarlas independientemente
     local collided_this_frame = false
 
-    if helpers.are_colliding(entities.player, entities.ball) then
+    if helpers.are_colliding("player", "ball") then
         if not ball_collided then
-            deltax = (position[entities.ball].x + rect[entities.ball].x/2) - position[entities.player].x
+            deltax = (position["ball"].x + rect["ball"].x/2) - position["player"].x
 
-            ball_speed_norm = osbmath.new_univector(-math.cos(math.pi * deltax / rect[entities.player].x), (-1) * (math.sin(math.pi * deltax / rect[entities.player].x) * 3/4 + 1/4))
-            velocity[entities.ball].x = ball_maxspeed * ball_speed_norm.x
-            velocity[entities.ball].y = ball_maxspeed * ball_speed_norm.y
+            ball_speed_norm = osbmath.new_univector(-math.cos(math.pi * deltax / rect["player"].x), (-1) * (math.sin(math.pi * deltax / rect["player"].x) * 3/4 + 1/4))
+            velocity["ball"].x = ball_maxspeed * ball_speed_norm.x
+            velocity["ball"].y = ball_maxspeed * ball_speed_norm.y
         end
         collided_this_frame = true
 
@@ -177,46 +201,46 @@ function love.update(dt)
         love.audio.play(hit_sound)
     end
 
-    if helpers.are_colliding(entities.ball, entities.topwall) then
+    if helpers.are_colliding("ball", "topwall") then
         if not ball_collided then
-            velocity[entities.ball].y = math.abs(velocity[entities.ball].y)
+            velocity["ball"].y = math.abs(velocity["ball"].y)
         end
         collided_this_frame = true
         love.audio.play(hit_sound)
     end
 
-    if helpers.are_colliding(entities.ball, entities.leftwall) then
+    if helpers.are_colliding("ball", "leftwall") then
         if not ball_collided then
-            velocity[entities.ball].x = math.abs(velocity[entities.ball].x)
+            velocity["ball"].x = math.abs(velocity["ball"].x)
         end
         collided_this_frame = true
         love.audio.play(hit_sound)
     end
 
-    if helpers.are_colliding(entities.ball, entities.rightwall) then
+    if helpers.are_colliding("ball", "rightwall") then
         if not ball_collided then
-            velocity[entities.ball].x = -math.abs(velocity[entities.ball].x)
+            velocity["ball"].x = -math.abs(velocity["ball"].x)
         end
         collided_this_frame = true
         love.audio.play(hit_sound)
     end
 
-    if helpers.are_colliding(entities.ball, entities.bottomwall) then
-        velocity[entities.ball] = {x = 0, y = 0}
-        position[entities.ball].x = width/2 - player_height/2
-        position[entities.ball].y = height/2 - player_height/2
-        position[player].x = (width / 2)-player_length/2
+    if helpers.are_colliding("ball", "bottomwall") then
+        velocity["ball"] = {x = 0, y = 0}
+        position["ball"].x = width/2 - player_height/2
+        position["ball"].y = height/2 - player_height/2
+        position["player"].x = (width / 2)-player_length/2
         love.audio.play(lose_sound)
         player_points = player_points - 200
         player_lives = player_lives - 1
     end
 
-    for i=7,#position do
-        if not status[i].dead and helpers.are_colliding(entities.ball, entities[i]) then
+    for i=0,118 do
+        if not status["brick_" .. i].dead and helpers.are_colliding("ball", "brick_" .. i) then
             if not ball_collided then
-                velocity[entities.ball].y = math.abs(velocity[entities.ball].y)
+                velocity["ball"].y = math.abs(velocity["ball"].y)
             end
-            status[i].dead = true
+            status["brick_" .. i].dead = true
             collided_this_frame = true
             player_points = player_points + 100
             love.audio.play(brick_sound)
@@ -225,17 +249,17 @@ function love.update(dt)
 
     ball_collided = collided_this_frame
     -- Movimiento de la bola
-    helpers.move(entities.ball, dt)
+    helpers.move("ball", dt)
 
     if player_lives <= 0 then
-        position[entities.player].x = (width / 2)-player_length/2
-        position[entities.ball].x = width/2 - player_height/2
-        position[entities.ball].y = height/2 - player_height/2
-        velocity[entities.ball] = {x = 0, y = 0}
+        position["player"].x = (width / 2)-player_length/2
+        position["ball"].x = width/2 - player_height/2
+        position["ball"].y = height/2 - player_height/2
+        velocity["ball"] = {x = 0, y = 0}
 
 
-        for i=7,#position do
-            status[i].dead = false
+        for i=0,118 do
+            status["brick_" .. i].dead = false
         end
 
         player_points = 0
@@ -246,9 +270,9 @@ end
 function love.draw()
     -- Dibujado
     love.graphics.setColor(0.2, 0, 0.8)
-    love.graphics.rectangle("fill", position[player].x, position[player].y, rect[player].x, rect[player].y)
+    love.graphics.rectangle("fill", position["player"].x, position["player"].y, rect["player"].x, rect["player"].y)
 
-    love.graphics.rectangle("fill", position[entities.ball].x, position[entities.ball].y, rect[entities.ball].x, rect[entities.ball].y)
+    love.graphics.rectangle("fill", position["ball"].x, position["ball"].y, rect["ball"].x, rect["ball"].y)
 
     love.graphics.print("POINTS " .. player_points, width*3/4, height - 100)
     love.graphics.print("PRESS R TO RESET", 20, height - 150)
@@ -259,9 +283,9 @@ function love.draw()
 
     love.graphics.setColor(0.8, 0.2, 0)
 
-    for i=7,#position do
-        if status[i].dead == false then
-            love.graphics.rectangle("fill", position[i].x, position[i].y, rect[i].x, rect[i].y)
+    for i=0,118 do
+        if status["brick_" .. i].dead == false then
+            love.graphics.rectangle("fill", position["brick_" .. i].x, position["brick_" .. i].y, rect["brick_" .. i].x, rect["brick_" .. i].y)
         end
     end
 

@@ -41,7 +41,7 @@ for i=0,118 do
     local col = i % brick_cols
     local row = i % brick_rows
 
-    position["brick" .. i] = {
+    position["brick_" .. i] = {
         x = 20 + col*(brick_l + 3) + osbmath.oddevenmap(row)*(brick_l/4 + 1.5),
         y = 20 + row*(brick_l/2 + 3)
     }

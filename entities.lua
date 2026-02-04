@@ -17,7 +17,7 @@ entities = {
 
 for i=0, brick_cols * brick_rows - 1 do
 
-    table.insert(entities, "brick" .. i)
+    table.insert(entities, "brick_" .. i)
     
 end
 
