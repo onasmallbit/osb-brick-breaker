@@ -15,6 +15,7 @@ local wall_th = constants.WALL_THICKNESS
 
 local brick_cols = constants.BRICK_COLUMNS
 local brick_rows = constants.BRICK_ROWS
+local brick_sp = constants.BRICK_SPACING
 
 position = {}
 
@@ -42,8 +43,8 @@ for i=0,118 do
     local row = i % brick_rows
 
     position["brick_" .. i] = {
-        x = 20 + col*(brick_l + 3) + osbmath.oddevenmap(row)*(brick_l/4 + 1.5),
-        y = 20 + row*(brick_l/2 + 3)
+        x = 20 + col*(brick_l + brick_sp) + osbmath.oddevenmap(row)*(brick_l/4 + brick_sp/2),
+        y = 20 + row*(brick_l/2 + brick_sp)
     }
     
 end

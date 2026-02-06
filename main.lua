@@ -39,25 +39,6 @@ helpers.are_colliding = function(entity1_id, entity2_id)
 end
 
 function love.load()
-
-    local font = love.graphics.newFont("ttf/at01.ttf", 50)
-    love.graphics.setFont(font)
-
-    hit_sound = love.audio.newSource("ogg/ping_pong_8bit_plop.ogg", "static")
-    brick_sound = love.audio.newSource("ogg/ping_pong_8bit_beeep.ogg", "static")
-    lose_sound = love.audio.newSource("ogg/ping_pong_8bit_peeeeeep.ogg", "static")
-    
-    hit_sound:setVolume(5.0)
-
-    background_music = love.audio.newSource("wav/Mercury.wav", "stream")
-    background_music:setLooping(true)
-    background_music:setVolume(0.8)
-    background_music:play()
-
-    love.window.setTitle("OSB Brick Breaker")
-    love.window.setMode(800, 600)
-    love.graphics.setBackgroundColor(0.8, 0.8, 1)
-
     width = constants.SCREEN_WIDTH
     height = constants.SCREEN_HEIGHT
 
@@ -75,6 +56,25 @@ function love.load()
     sqrt2 = constants.SQRT2
 
     ball_collided = false
+
+
+    local font = love.graphics.newFont("ttf/at01.ttf", height * 1/16)
+    love.graphics.setFont(font)
+
+    hit_sound = love.audio.newSource("wav/ping_pong_8bit_plop.wav", "static")
+    brick_sound = love.audio.newSource("wav/ping_pong_8bit_beeep.wav", "static")
+    lose_sound = love.audio.newSource("wav/ping_pong_8bit_peeeeeep.wav", "static")
+    
+    hit_sound:setVolume(5.0)
+
+    background_music = love.audio.newSource("wav/Mercury.wav", "stream")
+    background_music:setLooping(true)
+    background_music:setVolume(0.8)
+    background_music:play()
+
+    love.window.setTitle("OSB Brick Breaker")
+    love.window.setMode(width, height)
+    love.graphics.setBackgroundColor(0.8, 0.8, 1)
 
     velocity["player"].x = player_maxspeed
 
@@ -201,11 +201,11 @@ function love.draw()
 
     love.graphics.rectangle("fill", position["ball"].x, position["ball"].y, rect["ball"].x, rect["ball"].y)
 
-    love.graphics.print("POINTS " .. player_points, width*3/4, height - 100)
-    love.graphics.print("PRESS R TO RESET", 20, height - 150)
-    love.graphics.print("PRESS A, D TO MOVE", 20, height - 200)
+    love.graphics.print("POINTS " .. player_points, width*3/4, height * 5/6 )
+    love.graphics.print("PRESS R TO RESET", width * 1/40, height * 3/4)
+    love.graphics.print("PRESS A, D TO MOVE", width * 1/40, height * 2/3)
 
-    love.graphics.print("LIVES " .. player_lives, width*3/4, height - 150)
+    love.graphics.print("LIVES " .. player_lives, width*3/4, height * 3/4)
 
 
     love.graphics.setColor(0.8, 0.2, 0)
