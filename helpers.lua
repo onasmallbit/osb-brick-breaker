@@ -1,8 +1,12 @@
 -- This file is responsible for defining helper functions used throughout the game.
 
-helpers = {}
- 
-helpers.move = function(entity_id, dt)
+local position = require "position"
+local velocity = require "velocity"
+local rect = require "rect"
+
+local helpers = {}
+
+function helpers.move(entity_id, dt)
     position[entity_id].x = position[entity_id].x + velocity[entity_id].x * dt
     position[entity_id].y = position[entity_id].y + velocity[entity_id].y * dt
 
@@ -10,13 +14,14 @@ helpers.move = function(entity_id, dt)
         if position[entity_id].x < 0 then
             position[entity_id].x = 0
         end
-        if position[entity_id].x + rect[entity_id].x > width then
-            position[entity_id].x = width - rect[entity_id].x
+        if position[entity_id].x + rect[entity_id].x > constants.SCREEN_WIDTH then
+            position[entity_id].x = constants.SCREEN_WIDTH - rect[entity_id].x
         end
     end
+
 end
 
-helpers.are_colliding = function(entity1_id, entity2_id)
+function helpers.are_colliding(entity1_id, entity2_id)
     local pos1 = position[entity1_id]
     local pos2 = position[entity2_id]
     local dim1 = rect[entity1_id]

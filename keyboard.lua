@@ -3,6 +3,14 @@
 
 local keyboard = {}
 
+local ball_maxspeed = constants.BALL_MAXSPEED
+local player_maxspeed = constants.PLAYER_MAXSPEED
+local player_length = constants.PLAYER_LENGTH
+local player_height = constants.PLAYER_HEIGHT
+local width = constants.SCREEN_WIDTH
+local height = constants.SCREEN_HEIGHT
+local sqrt2 = constants.SQRT2
+
 function keyboard.update(dt)
 
     if love.keyboard.isDown("a") then
